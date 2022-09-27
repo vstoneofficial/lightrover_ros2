@@ -75,13 +75,13 @@ source /opt/ros/foxy/setup.bash
 colcon build
 ```
 
-### YDLidarのセットアップ
+### YDLIDARのセットアップ
 1. 必要パッケージのインストール
 ```
 sudo apt install cmake pkg-config
 ```
 
-2. YDLidar-SDKをインストールする
+2. YDLIDAR-SDKをインストールする
 ```
 cd ~/
 git clone https://github.com/YDLIDAR/YDLidar-SDK
@@ -92,7 +92,7 @@ make
 sudo make install
 ```
 
-3. YDLiDAR ROS2ドライバをクローンする
+3. YDLIDAR ROS2ドライバをクローンする
 ```
 cd ~/ros2_ws/src
 git clone https://github.com/YDLIDAR/ydlidar_ros2_driver
@@ -130,7 +130,7 @@ ydlidar_ros2_driver_node:
     invalid_range_is_inf: false
 ~~~
 
-5. YDLiDAR ROS2をインストールする
+5. YDLIDAR ROS2をインストールする
 ```
 source /opt/ros/foxy/setup.bash
 cd ~/ros2_ws
