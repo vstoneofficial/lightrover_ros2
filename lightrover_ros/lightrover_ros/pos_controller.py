@@ -54,7 +54,7 @@ class DriveMotor(Node):
             )
         self.drive_subscriber = self.create_subscription(
             Twist,
-            'rover_drive',
+            'rover_twist',
             self.cb_set_target_v,
             1
             )

@@ -13,7 +13,7 @@ speed = Twist()
 class GamePad(Node):
     def __init__(self):
         super().__init__('rover_gamepad')
-        self.publisher_ = self.create_publisher(Twist, 'rover_drive', 1)
+        self.publisher_ = self.create_publisher(Twist, 'rover_twist', 1)
         self.subscription_ = self.create_subscription(
             Joy,
             'joy',
