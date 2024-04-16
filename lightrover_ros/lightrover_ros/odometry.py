@@ -128,7 +128,7 @@ def lightrover_odometry(args=None):
             odom_tf = TransformStamped()
             odom_tf.header.stamp = now_time
             odom_tf.header.frame_id = 'odom'
-            odom_tf.child_frame_id = 'base_link'
+            odom_tf.child_frame_id = 'base_footprint'
 
             odom_quat = tf_transformations.quaternion_from_euler(0, 0, th)
 
@@ -155,7 +155,7 @@ def lightrover_odometry(args=None):
             odom.pose.pose.orientation.z = odom_quat[2]
             odom.pose.pose.orientation.w = odom_quat[3]
 
-            odom.child_frame_id = "base_link"
+            odom.child_frame_id = "base_footprint"
             odom.twist.twist.linear.x = get_val[0]
             odom.twist.twist.linear.y = 0.0
             odom.twist.twist.angular.z = get_val[1]

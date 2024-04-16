@@ -33,7 +33,7 @@ def generate_launch_description():
                                 
     tf2_node = Node(package='tf2_ros',
                     executable='static_transform_publisher',output='screen',
-                    arguments=['-0.042', '0', '0.1094', '-1.5708', '0','0','base_link','laser_frame'],
+                    arguments=['-0.042', '0', '0.1094', '-1.5708', '0','0','base_footprint','laser_frame'],
                     )
     
     slam_node = Node(
