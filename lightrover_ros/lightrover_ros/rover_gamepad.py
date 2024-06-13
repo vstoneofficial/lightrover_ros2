@@ -7,6 +7,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
+import time
 
 speed = Twist()
 
@@ -20,7 +21,6 @@ class GamePad(Node):
             self.callback,
             1
         )
-        self.rate = self.create_rate(20)
 
     def callback(self, data):
         global speed
@@ -29,6 +29,8 @@ class GamePad(Node):
         speed.angular.z = data.axes[2]*2.0
 
         self.publisher_.publish(speed)
+
+        time.sleep(0.05)
 
 def rover_gamepad(args=None):
     global speed
@@ -40,6 +42,9 @@ def rover_gamepad(args=None):
     game_pad.get_logger().info('Game pad node start')
 
     rclpy.spin(game_pad)
+
+    game_pad.destroy_node()
+    rclpy.shutdown()
 
     '''
 

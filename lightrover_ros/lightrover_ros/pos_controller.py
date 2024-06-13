@@ -69,6 +69,8 @@ class DriveMotor(Node):
 
         output = motor_controller.pos_controll(current_v, target_rover_v)
         self.drive_motor(output[0], output[1])
+
+        time.sleep(0.05)
         
     def cb_set_target_v(self, data):
         global ROVER_D, target_rover_v

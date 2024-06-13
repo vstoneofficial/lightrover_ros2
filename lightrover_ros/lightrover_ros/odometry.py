@@ -43,8 +43,8 @@ class OdometryManager(Node):
         while not self.read_enc.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Sevice is not available')
         self.req = Wrc201Msg.Request()
-        self.publisher_ = self.create_publisher(Odometry, 'odom', 50)
-        self.rate = self.create_rate(100)
+        self.publisher_ = self.create_publisher(Odometry, 'odom', 1)
+        self.rate = self.create_rate(30)
 
     def getEncVal(self):
         self.req.addr = MS32_M_POS0
@@ -159,12 +159,11 @@ def lightrover_odometry(args=None):
             odom.twist.twist.linear.x = get_val[0]
             odom.twist.twist.linear.y = 0.0
             odom.twist.twist.angular.z = get_val[1]
-
             odom_manager.publisher_.publish(odom)
 
-            odom_manager.rate.sleep()
-
             odom_manager.getEncVal()
+        
+        time.sleep(0.025)
 
 if __name__=="__main__":
     lightrover_odometry() 
