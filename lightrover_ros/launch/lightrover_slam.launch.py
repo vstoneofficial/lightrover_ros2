@@ -16,6 +16,11 @@ def generate_launch_description():
     parameter_file = LaunchConfiguration('params_file')
     node_name = 'ydlidar_ros2_driver_node'
 
+    static_tf_base_to_footprint = Node(package='tf2_ros',
+                                       executable='static_transform_publisher',
+                                       output='screen',
+                                       arguments=['0', '0', '0', '0', '0', '0', 'base_footprint', 'base_link'])
+
     params_declare = DeclareLaunchArgument('params_file',
                                            default_value=os.path.join(
                                                share_dir, 'params', 'X2.yaml'),
@@ -59,6 +64,7 @@ def generate_launch_description():
         params_declare,
         driver_node,
         tf2_node,
+        static_tf_base_to_footprint,
         slam_node,
         rviz2_node,
     ])
