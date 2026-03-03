@@ -7,13 +7,13 @@ ydlidar_ros2_driver_node:
     lidar_type: 1
     device_type: 0
     sample_rate: 3
-    intensity_bit: 0
     abnormal_check_count: 4
     fixed_resolution: true
     reversion: false
     inverted: true
     auto_reconnect: true
     isSingleChannel: true
+    intensity_bit: 0
     intensity: false
     support_motor_dtr: true
     angle_max: 180.0
@@ -22,3 +22,4 @@ ydlidar_ros2_driver_node:
     range_min: 0.1
     frequency: 10.0
     invalid_range_is_inf: false
+    debug: false
