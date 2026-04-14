@@ -14,6 +14,10 @@ speed = Twist()
 class GamePad(Node):
     def __init__(self):
         super().__init__('rover_gamepad')
+        self.declare_parameter('linear_scale', 0.3)
+        self.declare_parameter('angular_scale', 2.0)
+        self.linear_scale = float(self.get_parameter('linear_scale').value)
+        self.angular_scale = float(self.get_parameter('angular_scale').value)
         self.publisher_ = self.create_publisher(Twist, 'rover_twist', 1)
         self.subscription_ = self.create_subscription(
             Joy,
@@ -21,12 +25,22 @@ class GamePad(Node):
             self.callback,
             1
         )
+        self.debug_counter = 0
 
     def callback(self, data):
         global speed
 
-        speed.linear.x = data.axes[1]*0.1
-        speed.angular.z = data.axes[2]*2.0
+        speed.linear.x = data.axes[1] * self.linear_scale
+        speed.angular.z = data.axes[2] * self.angular_scale
+
+        self.debug_counter += 1
+        if self.debug_counter % 20 == 0:
+            axes = ', '.join(f'{value:.3f}' for value in data.axes)
+            buttons = ', '.join(str(value) for value in data.buttons)
+            self.get_logger().info(
+                f'Joy axes=[{axes}] buttons=[{buttons}] -> '
+                f'rover_twist linear.x={speed.linear.x:.3f} angular.z={speed.angular.z:.3f}'
+            )
 
         self.publisher_.publish(speed)
 

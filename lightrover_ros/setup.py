@@ -30,6 +30,10 @@ setup(
             'odom_manager = lightrover_ros.odometry:lightrover_odometry',
             'pos_controller = lightrover_ros.pos_controller:pos_cntrl',
             'rover_gamepad = lightrover_ros.rover_gamepad:rover_gamepad',
+            'set_initial_pose = lightrover_ros.set_initial_pose:main',
+            'send_nav_goal = lightrover_ros.send_nav_goal:main',
+            'ydlidar_driver_probe = lightrover_ros.ydlidar_driver_probe:main',
+            'ydlidar_serial_probe = lightrover_ros.ydlidar_serial_probe:main',
         ],
     },
 )

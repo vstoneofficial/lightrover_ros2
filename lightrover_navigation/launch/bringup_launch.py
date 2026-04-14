@@ -130,7 +130,7 @@ def generate_launch_description():
             output='screen'),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'lightrover_slam.launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam_sync.launch.py')),
             condition=IfCondition(slam),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,

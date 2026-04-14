@@ -1,53 +1,63 @@
-#!/usr/bin/python3
-# Copyright 2020, EAIBOT
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
-from launch_ros.actions import LifecycleNode
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-
 import os
-
 
 def generate_launch_description():
     lightrover_ros_share_dir = get_package_share_directory('lightrover_ros')
-    parameter_file = LaunchConfiguration('params_file')
+    parameter_file = LaunchConfiguration('lidar_params_file')
 
-    params_declare = DeclareLaunchArgument('params_file',
-                                           default_value=os.path.join(
-                                               lightrover_ros_share_dir, 'params', 'X2.yaml'),
-                                           description='FPath to the ROS2 parameters file to use.')
+    params_declare = DeclareLaunchArgument('lidar_params_file',
+        default_value=os.path.join(lightrover_ros_share_dir, 'params', 'X2.yaml'),
+        description='Path to the LiDAR params YAML file'
+    )
 
-    driver_node = LifecycleNode(package='ydlidar_ros2_driver',
-                                executable='ydlidar_ros2_driver_node',
-                                name='ydlidar_ros2_driver_node',
-                                output='screen',
-                                emulate_tty=True,
-                                parameters=[parameter_file],
-                                namespace='/',
-                                )
-    tf2_node = Node(package='tf2_ros',
-                    executable='static_transform_publisher',
-                    name='static_tf_pub_laser',
-                    arguments=['0', '0', '0', '0', '0', '0', '1','base_link','laser_frame'],
-                    )
+    driver_node = Node(package='ydlidar_ros2_driver',
+        executable='ydlidar_ros2_driver_node',
+        name='ydlidar_ros2_driver_node',
+        output='screen',
+        emulate_tty=True,
+        parameters=[parameter_file],
+        namespace='/'
+    )
+
+    tf2_laser = Node(package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_pub_laser',
+        arguments=[
+            '--x', '-0.042',
+            '--y', '0',
+            '--z', '0.1094',
+            '--yaw', '-1.5708',
+            '--pitch', '0',
+            '--roll', '0',
+            '--frame-id', 'base_link',
+            '--child-frame-id', 'laser_frame',
+        ],
+        output='screen'
+    )
+
+    tf2_base = Node(package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_pub_base',
+        arguments=[
+            '--x', '0',
+            '--y', '0',
+            '--z', '0',
+            '--roll', '0',
+            '--pitch', '0',
+            '--yaw', '0',
+            '--frame-id', 'base_footprint',
+            '--child-frame-id', 'base_link',
+        ],
+        output='screen'
+    )
 
     return LaunchDescription([
         params_declare,
         driver_node,
-        # tf2_node,  # not required, since static_transform_publisher is published by description launch file
+        tf2_laser,
+        tf2_base
     ])
