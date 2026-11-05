@@ -1,3 +1,4 @@
 [submodule "lightrover_description"]
 	path = lightrover_description
 	url = https://github.com/vstoneofficial/lightrover_description.git
+	branch = jazzy
