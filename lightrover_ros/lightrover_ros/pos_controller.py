@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import struct
+import time
 import rclpy
 from rclpy.node import Node
 from lightrover_interface.srv import Wrc201Msg
@@ -37,6 +38,13 @@ class DriveMotor(Node):
         super().__init__('pos_controller')
         self.debug_counter = 0
         self.pending_write = None
+
+        # 速度指令のタイムアウト [s]
+        # 最後の指令からこの時間を超えて新しい指令が来なければ目標速度を0にする
+        # 0以下を指定するとタイムアウトを無効にする
+        self.cmd_timeout = float(self.declare_parameter('cmd_timeout', 0.5).value)
+        self.last_cmd_time = None
+        self.cmd_timed_out = False
 
         self.write_msg = self.create_client(Wrc201Msg, 'wrc201_i2c')
         while not self.write_msg.wait_for_service(timeout_sec=1.0):
@@ -100,7 +108,27 @@ class DriveMotor(Node):
         target_rover_v[1] = (data.linear.x + ROVER_D * data.angular.z)
         target_rover_v[0] = -1.0 * (data.linear.x - ROVER_D * data.angular.z)
 
+        self.last_cmd_time = time.monotonic()
+        if self.cmd_timed_out:
+            self.get_logger().info('Velocity command received again, resuming')
+            self.cmd_timed_out = False
+
+    def check_cmd_timeout(self):
+        global target_rover_v
+
+        if self.cmd_timeout <= 0.0 or self.last_cmd_time is None or self.cmd_timed_out:
+            return
+        if time.monotonic() - self.last_cmd_time > self.cmd_timeout:
+            # 停止指令(0)を受けた後に指令が途絶えるのは正常なので警告しない
+            if target_rover_v[0] != 0.0 or target_rover_v[1] != 0.0:
+                self.get_logger().warn(
+                    'No velocity command for %.2f s, stopping the rover' % self.cmd_timeout)
+            target_rover_v[0] = 0.0
+            target_rover_v[1] = 0.0
+            self.cmd_timed_out = True
+
     def control_loop(self):
+        self.check_cmd_timeout()
         output = motor_controller.pos_controll(current_v, target_rover_v)
         if self.debug_counter % 20 == 0:
             self.get_logger().info(
