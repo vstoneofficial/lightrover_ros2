@@ -30,6 +30,8 @@ setup(
             'odom_manager = lightrover_ros.odometry:lightrover_odometry',
             'pos_controller = lightrover_ros.pos_controller:pos_cntrl',
             'rover_gamepad = lightrover_ros.rover_gamepad:rover_gamepad',
+            'rover_keyboard = lightrover_ros.rover_keyboard:rover_keyboard',
+            'rover_mouse = lightrover_ros.rover_mouse:rover_mouse',
         ],
     },
 )
