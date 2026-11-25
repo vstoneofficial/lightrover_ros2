@@ -7,22 +7,31 @@
   <maintainer email="infodesk@vstone.co.jp">vstone</maintainer>
   <license>Apache License 2.0</license>
 
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- C++ / Python 共通 -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>lightrover_interface</depend>
+
+  <!-- Python ノード / launch -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>python3-tk</exec_depend>
+  <exec_depend>xterm</exec_depend>
+
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>nav_msgs</exec_depend>
-  <exec_depend>nav2_msgs</exec_depend>
-  <exec_depend>lightrover_interface</exec_depend>
-  <exec_depend>joy</exec_depend>
-  <exec_depend>python3-tk</exec_depend>
-  <exec_depend>xterm</exec_depend>
-
   <export>
-    <build_type>ament_python</build_type>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>

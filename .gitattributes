@@ -1,0 +1,11 @@
+# ROS 2 (Linux) で使うため、テキストファイルは OS に関係なく常に LF で扱う。
+# Windows (core.autocrlf=true) で作業しても作業ツリーは LF になり、
+# 実機へコピーしても shebang が "python3\r" になって起動できない問題が起きない。
+* text=auto eol=lf
+
+# バイナリファイル (改行変換しない)
+*.pgm binary
+*.png binary
+*.jpg binary
+*.stl binary
+*.pyc binary
